@@ -53,17 +53,31 @@ document.addEventListener("DOMContentLoaded", () => {
     hours: timeFields.style.display === "block" ? calculateHours(timeStart.value, timeEnd.value) : ""
   };
 
-  const records = JSON.parse(localStorage.getItem("employeeRecords") || "[]");
-  records.push(record);
-  localStorage.setItem("employeeRecords", JSON.stringify(records));
-
+  fetch("https://your-backend.com/api/records", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(record)
+})
+.then(res => res.json())
+.then(() => {
   Swal.fire({
-  icon: "success",
-  title: "Submitted!",
-  text: "Record has been saved successfully.",
-  showConfirmButton: false,
-  timer: 1500
+    icon: "success",
+    title: "Submitted!",
+    text: "Record has been saved successfully.",
+    showConfirmButton: false,
+    timer: 1500
+  });
+  form.reset();
+  leaveType.style.display = leaveTypeLabel.style.display = "none";
+  timeFields.style.display = "none";
+})
+.catch(error => {
+  console.error("Error saving record:", error);
+  alert("Error saving record online.");
 });
+
 
   form.reset();
   leaveType.style.display = leaveTypeLabel.style.display = "none";
@@ -134,21 +148,54 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ✏️ Edit/delete/export utilities
-function editRecord(index, key, value) {
-  const records = JSON.parse(localStorage.getItem("employeeRecords") || "[]");
-  records[index][key] = value;
-  localStorage.setItem("employeeRecords", JSON.stringify(records));
+function editRecord(id, key, value) {
+  fetch(`https://your-backend.com/api/records/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ [key]: value })
+  })
+  .then(res => res.json())
+  .then(() => {
+    alert("Record updated!");
+  })
+  .catch(err => {
+    console.error("Error updating:", err);
+  });
 }
 
-function deleteRecord(index) {
-  const records = JSON.parse(localStorage.getItem("employeeRecords") || "[]");
-  records.splice(index, 1);
-  localStorage.setItem("employeeRecords", JSON.stringify(records));
-  location.reload();
+
+
+function deleteRecord(id) {
+  fetch(`https://your-backend.com/api/records/${id}`, {
+    method: "DELETE"
+  })
+  .then(() => {
+    alert("Record deleted.");
+    location.reload();
+  })
+  .catch(err => console.error("Delete error:", err));
 }
+
 
 function exportToExcel() {
-  const records = JSON.parse(localStorage.getItem("employeeRecords") || "[]");
+  fetch("https://your-backend.com/api/records")
+  .then(res => res.json())
+  .then(records => {
+    let csv = "Name,Department,Date Filed,Leave Date,Leave Type,Reason,Time Start,Time End,Hours\n";
+    records.forEach(r => {
+      csv += `${r.name},${r.department},${r.dateFiled},${r.leaveDate || r.dateOfLeave},${r.leaveType},${r.reason},${r.timeStart || ""},${r.timeEnd || ""},${r.hours || ""}\n`;
+    });
+    const blob = new Blob([csv], { type: "text/csv" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "records.csv";
+    link.click();
+  })
+  .catch(err => {
+    console.error("Export error:", err);
+    alert("Failed to export records.");
+  });
+
   let csv = "Name,Department,Date Filed,Leave Date,Leave Type,Reason,Time Start,Time End,Hours\n";
   records.forEach(r => {
     csv += `${r.name},${r.department},${r.dateFiled},${r.leaveDate || r.dateOfLeave},${r.leaveType},${r.reason},${r.timeStart || ""},${r.timeEnd || ""},${r.hours || ""}\n`;

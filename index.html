@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Employee Data Entry</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #e646be, #f191dd);
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #9b1078;
+      color: white;
+      padding: 15px 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      animation: pulseHighlight 2.5s infinite;
+    }
+    .navbar .logo {
+      height: 50px;
+    }
+    .company-brand {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .nav-buttons a {
+      color: white;
+      margin-left: 15px;
+      text-decoration: none;
+      padding: 8px 15px;
+      background: #b030b0;
+      border-radius: 5px;
+    }
+    .main-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .form-container {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 600px;
+    }
+    .form-container h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #800080;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      margin-top: 5px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    textarea {
+      resize: vertical;
+    }
+    button[type="submit"] {
+      margin-top: 25px;
+      padding: 12px;
+      background-color: #800080;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button[type="submit"]:hover {
+      background-color: #cf0caf;
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <img src="chat.png" alt="Company Logo" class="logo">
+    <div class="company-brand">Queens Link Technology INC.</div>
+    <div class="nav-buttons">
+      <a href="index.html">Data Entry</a>
+      <a href="records.html">Records</a>
+      <a href="charts.html">Charts</a>
+    </div>
+  </header>
+
+  <div class="main-content">
+    <div class="form-container">
+      <h2>Employee Data Entry</h2>
+      <form id="unifiedForm">
+        <label for="formType">Form Type:</label>
+        <select id="formType" required>
+          <option value="">-- Select Form Type --</option>
+          <option>Application for Leave</option>
+          <option>Leave Without Pay</option>
+          <option>Official Business Trip</option>
+          <option>Overtime Work Application</option>
+          <option>Early Out Application Form</option>
+          <option>Failure to Time In/Out</option>
+        </select>
+
+        <label for="namePosition">Employee Name:</label>
+        <!-- For Name -->
+<input list="employeeNames" id="namePosition" placeholder="Select employee name" required />
+<datalist id="employeeNames">
+   <option value="Enero, Jose Marie Nuevo - Chief Executive Officer"> </option>
+            <option value="Ramos, Elizabeth Morales - General Manager"> </option>
+            <option value="Nodalo, Milalie Tabaranza - HR Officer"> </option>
+            <option value="Colon, Lovely Joy Lacerna - IT Technical Support/ HR Assistant"> </option>
+            <option value="Enero, Agnes Pasturan - Sales Supervisor"> </option>
+            <option value="Bacunal, Ofre Peter John Olaco - Sales&Marketing Officer"> </option>
+            <option value="Cataag, Dan Aljoy Comiso - Graphic Designer/ Shopee Sales Custodian"> </option>
+            <option value="Parrilla, Angelito Dela Cruz - Inventory Clerk"> </option>
+            <option value="Roche, Jino Abapo - Company Driver"> </option>
+            <option value="Ando, Jerome - Messenger"> </option>
+            <option value="Negro, Nelyn Juan- Sales Agent"> </option>
+            <option value="Santos, Paul Alvin B. - Sales Agent"> </option>
+            <option value="Cogay, Jeric - Sales Agent"> </option>
+            <option value="Rapana, John Mark - Sales Agent"> </option>
+            <option value="Biacolo, Gresa Almendras - Senior Accounting"> </option>
+            <option value="Bolaño, Rachel Aro - Cashier"> </option>
+            <option value="Bañez, Rose May Lascoña - Accounting Staff"> </option>
+            <option value="Asne, Maria Rubilyn Abayon - Accounting Staff"> </option>
+            <option value="Relevo, Menchie Dapita - Accounting Staff"> </option>
+            <option value="Peroso, Michael Denzo - Warehouse Costudian"> </option>
+            <option value="Bensig, Reynante Apalan - Warehouse Assistant"> </option>
+            <option value="Cabusas, Enrique - Technical Manager"> </option>
+            <option value="Pono, Nelio Banghit - Senior IT Developer"> </option>
+            <option value="Denzo, Ramon Espinosa JR.- Technician Head Support"> </option>
+            <option value="Vega, Edu Mark Biacolo - IT Technical Support"> </option>
+            <option value="Omega, Edmar Cabahu - Project Engineer"> </option>
+            <option value="Lusares, Aira G. - Project Engineer"> </option>
+            <option value="Tampus, Jimboy Suerto - IT Technical Support"> </option>
+            <option value="Campos, Janbert Robles - Junior IT Programmer"> </option>
+            <option value="Colon, James Albert Paug - Account Officer"> </option>
+            <option value="Masong, John Mark Cancana - Assistant Account Officer"> </option>
+            <option value="Enero, Roldan Nuevo JR. - Assistant Project Engineer"> </option>
+            <option value="Limpangog, Anna Rose Guillemer - IT Technical Support"> </option>
+            <option value="Quial, Mark Jason Barco - Technical Head Support/OIC"> </option>
+            <option value="Syjico, Ellenol Vega - Cashier"> </option>
+            <option value="Abergido, Gino Bubuli - Field Technician"> </option>
+            <option value="Acero, Vincent Sumilhig - Field Technical"> </option>
+            <option value="Lungay, Crisvirgel Baha - Field Technician"> </option>
+            <option value="Masbad, Joseph Angelo Nuñez - Field Technician"> </option>
+            <option value="Mundala, Kim Solihon - Field Technician"> </option>
+            <option value="Sultan, Roel Aberilla JR. - Field Technician"> </option>
+            <option value="Villegas, James Philip Garcia - Branch Manager Caloocan"> </option>
+            <option value="Tirado, Irish Loyola - IT Support"> </option>
+            <option value="Dorado, Cynthia Duron - Cashier"> </option>
+            <option value="Corpuz, Ethelle Niña - Sales Agent"> </option>
+            <option value="Bordallo, Manilyn Pacampar - Branch Manager Catbalogan"> </option>
+            <option value="Umayam, Rosel Docena - Cashier"> </option>
+            <option value="Rubio, Marvin Jay Gabrintina - IT Support"> </option>
+            <option value="Cabatu-an, Jhon Rey Igdalino - Field Technician"> </option>
+            <option value="Dapapac, Mark Joey Pacujan - Field Technician"> </option>
+            <option value="Gubat, John Erwin Alfonso - Field Technician"> </option>
+            <option value="Labine, Limar Mabanan - Field Technician"> </option>
+            <option value="Papelerin, Julius Golias - Field Technician"> </option>
+            <option value="Roma, Bernabe Berre - Field Technician"> </option>
+            <option value="Samonte, Ivan Narciso - Field Technician"> </option>
+            <option value="Jalayahay, Cris Paulo D. - Field Technician"> </option>
+            <option value="Morillo, Jerome R. - Field Technician"> </option>
+            <option value="De Asis, Anthony Zabala - Branch Manager Maasin"> </option>
+            <option value="Pelaez, Jhane Tarroza - Cashier"> </option> 
+            <option value="Otida, Rhyme E. - IT Support/ Safety Officer"> </option>
+            <option value="Laput, Felipe JR. C. - Field Technician/ Safety Officer"> </option>
+            <option value="Lopez, Eric C. - Field Technician/ Driver"> </option>
+            <option value="Carolino, Joel P. - Field Technician"> </option>
+            <option value="Otida, Ruel - Field Technician"> </option>
+            <option value="Tamba, Edward James - Field Technician"> </option>
+            <option value="Tucod, Bryan C. - Field Technician"> </option> 
+            <option value="Viscara, John T. - Field Technician"> </option>
+            <option value="Lopez, Harvey - Field Technician"> </option>
+            <option value="Juntong, Jose Allan Nuevo - Sales Executive"> </option>
+            <option value="Espartero, Rex John Aque - Warehouse Custodian"> </option>
+            <option value="Geralde, Jogabriel Kyle Tohay - IT Support"> </option>
+            <option value="Roque, Catherine Belacho - Branch Manager/ Safety Officer"> </option>
+            <option value="Regino, Jean-Rose Lubiano - Branch Cashier"> </option>
+            <option value="Talacay, Melinda Agodoy - Account Officer"> </option>
+            <option value="Sevilla, Leevan Clent Boleros - Team Leader"> </option>
+            <option value="Abejar, Loui Jay Omolon - Team Leader/ Driver"> </option>
+            <option value="Lampong, Mark Stephen Corro - Field Technician/ Safety Officer"> </option>
+            <option value="Obejero, Joshua Brian Canuto - Technical"> </option>
+            <option value="Catarungan, Angelo Cayetano - Field Technician"> </option>
+            <option value="Diaz, Renel Singzon - Field Technician"> </option>
+            <option value="Husayan, Reggie Roque - Field Technician"> </option>
+            <option value="Marquez, Onassis Go - Field Technician"> </option>
+            <option value="Postestad, Sydrex Nacional - Field Tech/ Driver"> </option>
+            <option value="Villacorta, Wennie Mesquiso - Field Tech"> </option>
+            <option value="Labrador, Chime Apilar - Field Tech "> </option>
+            <option value="Solatorio, Haward Sevilla - Field Tech "> </option>
+            <option value="Joseph, Roel Jay Bereso - Field Tech "> </option>
+            <option value="Sampaton, Melanie Garcia - Branch Manager Sogod"> </option>
+            <option value="Manligas, Jaime Macaliit - Tech Supervisor"> </option>
+            <option value="Consad, Nathaniel Aresga - IT Support"> </option>
+            <option value="Gonzales, Georgielyn Boado - Branch Cashier"> </option>
+            <option value="Cinco, Jeremy Pilobello - Team Leader"> </option>
+            <option value="Guinto, Justine Reyes - Driver/Team Leader"> </option>
+            <option value="Baylan, Junrell Ampo - Field Tech"> </option>
+            <option value="Beluan, Jonas James Arnie Bacalla - Field Tech "> </option>
+            <option value="Besande, Franklin Montederamos - Driver/Field Tech "> </option>
+            <option value="Betarmos, Nelson Vales - Driver/Field Tech "> </option>
+            <option value="Chua, Roldan Lord Bueno - Field Tech "> </option>
+            <option value="Manligas, Jose JR. Makiling - Field Tech "> </option>
+            <option value="Morales, Alvin Gerong - Driver/Team Leader"> </option>
+            <option value="Perez, Junrey Javier - Field Tech"> </option>
+            <option value="Rubillos, Marvin Sequera - Field Tech"> </option>
+            <option value="Villamor, Rendy Buena - Field Tech"> </option>
+            <option value="Sotto, Manel Diano - Branch Manager ST.Bernard"> </option>
+            <option value="Napalan, Alfred Pasadas - IT Support"> </option>
+            <option value="Sibay, Mary Rose Errua - Cashier"> </option>
+            <option value="Amistad, Dioscoro Romo - Field Tech Supervisor"> </option>
+            <option value="Alacre, Jiovannie TimogTimog SR. - Field Tech"> </option>
+            <option value="Ayso, Jeric Baroman - Field Tech"> </option>
+            <option value="Basbas, Joymar Daguil - Field Tech"> </option>
+            <option value="Comaya, Cedrick Mancio - Field Tech"> </option>
+            <option value="Dela Torre, Joy Salada - Field Tech"> </option>
+            <option value="Luardo, Victor Catayoc - Field Tech"> </option>
+            <option value="Magallanes, Carl James Perol - Field Tech"> </option>
+            <option value="Manlimos, Jinggo - Field Tech"> </option>
+            <option value="Pey, Arman Baal - Field Tech"> </option>
+            <option value="SY Kharl Christian Silor - Field Tech"> </option>
+            <option value="Albert, Jay G. - Field Tech"> </option>
+            <option value="Almine, Neil Corbilla - Field Tech"> </option>
+            <option value="Caña, Denmark Humang-it - Field Tech"> </option>
+            <option value="Dotarot, Vincent Morcisa - Field Tech"> </option>
+            <option value="Gabuyo, Michael Santillan - Field Tech"> </option>
+            <option value="Masagca, Ricardo Thsui - Field Tech"> </option>
+            <option value="Munda, Eil John - Field Tech"> </option>
+            <option value="Damiago, John Mark - Field Tech"> </option>
+            <option value="Libato, Cris Evan - Field Tech"> </option>
+            <option value="Libato, Franklin - Field Tech"> </option>
+            <option value="Palo, Jacinta M."> </option> 
+            <option value="Cortes, Daniel Alcala - Field Tech"> </option>
+            <option value="Cortes, Jay Reños - Field Tech"> </option>
+            <option value="Baldevia, Dhave Moreno - Field Tech"> </option>
+            <option value="Caalim, Jhomel Casilbas - Field Tech"> </option>
+            <option value="Radam, Egie Boy Martinito - Field Tech"> </option>
+            <option value="Tejada, Rene Austero - Field Tech"> </option>
+            <option value="Gucela, Joseph Miramonte - Field Tech"> </option>
+            <option value="Mercadal, Ritchie Enan - Field Tech"> </option>
+            <option value="Montajes, Joshua Boholist - Field Tech"> </option>
+            <option value="Ybañez, Armando Paton-og - Field Tech"> </option>
+            <option value="Enero, Amancio Hermosilla - Technical Field Supervisor"> </option>
+            <option value="Denso, Ramon Lingas SR. - Field Tech"> </option>
+            <option value="Aying, John Mark - Field Tech"> </option>
+            <option value="Cantilla, Lorhenz S. - Field Tech"> </option>
+            <option value="Cordeño, Marco Codilla - Technical"> </option>
+            <option value="Denzo, Alfonso Lingas - Field Tech"> </option>
+            <option value="Enero, Ryan Son Nuevo - Field Tech"> </option>
+            <option value="Guinipa-an, Ken Cantila - Field Tech"> </option>
+            <option value="Laude, Charito Bolaño - Technical"> </option>
+            <option value="Mercadal, Ricardo Enano - Field Tech"> </option>
+            <option value="Orellano, Roldan Abarilla - Field Tech"> </option>
+            <option value="Peroso, Rudmar Denzo - Technical"> </option>
+            <option value="Ragoro, Rheyvin Malinao - Field Tech">  </option>
+            <option value="Reando, Joshua Antigua - Field Tech">  </option>
+            <option value="Rita, John Pau C. - Field Tech">  </option>
+            <option value="Sabite, Reynaldo Villar - Field Tech">  </option>
+            <option value="Sacay, Rudyard C. - Technical">  </option>
+            <option value="Semogan, Alberto Jerunan - Driver/Technical">  </option>
+            <option value="Senillo, Alvin C. - Field Tech">  </option>
+            <option value="Sia-ang, Rey Jay Codilla - Field Tech">  </option>
+            <option value="Solano, Regie Formentera - Field Tech">  </option>
+            <option value="Toledo, Felipe Pumon - Field Tech">  </option>
+            <option value="Ariño, Warren Joemhel Silva - Field Tech/Driver">  </option>
+            <option value="Regis, John Peter Paul Contridas - Field Tech/Driver">  </option>
+            <option value="Regner, Marc Angelo Poliquit - Field Tech/Driver">  </option>
+            <option value="Villamor, Noel Tenedero - Field Tech/Driver">  </option>
+            <option value="Aribato, Mike Evar Abapo - Field Tech">  </option>
+            <option value="Baguion, Janjie R.Amirez - Field Tech">  </option>
+            <option value="Custodio, Christian Paghunasan - Field Tech">  </option>
+            <option value="Davila, Dominic Magbojos - Field Tech">  </option>
+            <option value="Dela Rama, Jan Robert Y. - Field Tech">  </option>
+            <option value="Intan, Felipe Terana - Field Tech">  </option>
+            <option value="Juan, Lorenze - Field Tech">  </option>
+            <option value="Lanugan, Junrix Anera - Field Tech">  </option>
+            <option value="Maguikay, John Carlo Sepe - Field Tech">  </option>
+            <option value="Sabite, Brandon Villar - Field Tech">  </option>
+            <option value="Tampos, Ralph Canuto - Field Tech">  </option>
+</datalist>
+
+<label for="assigndepartment">Assign Department:</label>
+<!-- For Department -->
+<input list="departmentList" id="assigndepartment" placeholder="Select Department" required />
+<datalist id="departmentList">
+  <option value="Accounting Department"></option>
+  <option value="Technical Department"></option>
+  <option value="Sales Department"></option>
+  <option value="Field Technician Department"></option>
+  <option value="General Manager Department"></option>
+  <option value="HR Department"></option>
+  <option value="Warehouse Department"></option>
+</datalist>
+
+
+
+        <label for="dateFiled">Date Filed:</label>
+        <input type="date" id="dateFiled" required />
+
+        <label for="leaveDate">Date of Leave / regular Day:</label>
+        <input type="date" id="leaveDate" required />
+
+        <label for="leaveType" id="leaveTypeLabel" style="display: none;">Leave Type:</label>
+        <select id="leaveType" style="display: none;">
+          <option value="">-- Select Leave Type --</option>
+          <option value="Sick Leave">Sick Leave</option>
+          <option value="Vacation Leave">Vacation Leave</option>
+          <option value="Service Incentive Leave">SIL</option>
+        </select>
+
+        <div id="timeFields" style="display: none;">
+          <label for="timeStart">Time Start:</label>
+          <input type="time" id="timeStart" />
+
+          <label for="timeEnd">Time End:</label>
+          <input type="time" id="timeEnd" />
+
+          <label for="hours">Total Hours:</label>
+          <input type="number" id="hours" readonly />
+        </div>
+
+        <label for="reason">Reason:</label>
+        <textarea id="reason" rows="4" placeholder="Enter reason..." required></textarea>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("unifiedForm");
+      const formType = document.getElementById("formType");
+      const leaveType = document.getElementById("leaveType");
+      const leaveTypeLabel = document.getElementById("leaveTypeLabel");
+      const timeFields = document.getElementById("timeFields");
+      const timeStart = document.getElementById("timeStart");
+      const timeEnd = document.getElementById("timeEnd");
+      const hours = document.getElementById("hours");
+
+      function calculateHours(start, end) {
+        if (!start || !end) return "";
+        const startTime = new Date(`1970-01-01T${start}`);
+        let endTime = new Date(`1970-01-01T${end}`);
+        if (endTime < startTime) {
+          endTime.setDate(endTime.getDate() + 1); // handles past-midnight shift
+        }
+        const diff = (endTime - startTime) / (1000 * 60 * 60);
+        return diff.toFixed(2);
+      }
+
+      formType.addEventListener("change", () => {
+        const selected = formType.value;
+        leaveType.style.display = leaveTypeLabel.style.display = selected === "Application for Leave" ? "block" : "none";
+        if (["Overtime Work Application", "Early Out Application Form", "Failure to Time In/Out", "Official Business Trip"].includes(selected)) {
+          timeFields.style.display = "block";
+        } else {
+          timeFields.style.display = "none";
+          timeStart.value = timeEnd.value = hours.value = "";
+        }
+      });
+
+      [timeStart, timeEnd].forEach(input => {
+        input.addEventListener("input", () => {
+          hours.value = calculateHours(timeStart.value, timeEnd.value);
+        });
+      });
+
+      form.addEventListener("submit", e => {
+        e.preventDefault();
+        const record = {
+         formType: formType.value,
+            name: document.getElementById("namePosition").value.trim(),
+            department: document.getElementById("assigndepartment").value.trim(),
+            dateFiled: document.getElementById("dateFiled").value,
+            leaveDate: document.getElementById("leaveDate").value,
+            leaveType: leaveType.style.display === "block" ? leaveType.value : "",
+            reason: document.getElementById("reason").value.trim(),
+            timeStart: timeStart.value || "",
+            timeEnd: timeEnd.value || "",
+            hours: timeFields.style.display === "block" ? calculateHours(timeStart.value, timeEnd.value) : ""
+        };
+
+        const records = JSON.parse(localStorage.getItem("employeeRecords") || "[]");
+        records.push(record);
+        localStorage.setItem("employeeRecords", JSON.stringify(records));
+
+        Swal.fire({
+           icon: "success",
+           title: "Submitted!",
+           text: "Record has been saved successfully.",
+           showConfirmButton: false,
+           timer: 1500
+         });
+
+        form.reset();
+        leaveType.style.display = leaveTypeLabel.style.display = "none";
+        timeFields.style.display = "none";
+
+      function formatTo12Hour(timeStr) {
+  if (!timeStr || !timeStr.includes(":")) return ""; // Prevent NaN
+  const [hourStr, minuteStr] = timeStr.split(":");
+  const hour = parseInt(hourStr, 10);
+  const minute = parseInt(minuteStr, 10);
+
+  if (isNaN(hour) || isNaN(minute)) return ""; // Defensive fallback
+
+  const period = hour >= 12 ? "PM" : "AM";
+  const hour12 = hour % 12 === 0 ? 12 : hour % 12;
+
+  return `${hour12}:${minute.toString().padStart(2, "0")} ${period}`;
+}
+
+
+
+      });
+    });
+
+   
+  </script>
+</body>
+</html>

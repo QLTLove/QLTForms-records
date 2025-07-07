@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Employee Records</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #e646be, #f191dd);
+      margin: 0;
+      padding: 0;
+    }
+    .records-container {
+      max-width: 1200px;
+      margin: 40px auto;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    h2 {
+      text-align: center;
+      color: #800080;
+    }
+    #searchInput {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #9b1078;
+      color: white;
+      padding: 15px 30px;
+    }
+    .logo {
+      height: 50px;
+    }
+    .company-brand {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .nav-buttons a {
+      color: white;
+      margin-left: 15px;
+      text-decoration: none;
+      padding: 8px 15px;
+      background: #b030b0;
+      border-radius: 4px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f8d0f4;
+      color: #800080;
+    }
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+    .action-btn {
+      padding: 5px 12px;
+      margin: 2px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+    }
+    .edit-btn {
+      background-color: #5c6bc0;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+    .delete-btn {
+      background-color: #e57373;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+    .save-btn {
+       background-color: #d40bc4;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+    #pagination {
+      text-align: center;
+      margin-top: 15px;
+    }
+    .page-btn {
+      margin: 0 5px;
+      padding: 5px 12px;
+      background-color: #e6b3cc;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #exportBtn, #printBtn {
+      background-color: #a00082;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+    }
+    .swal2-popup {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 15px !important;
+    padding: 25px !important;
+  }
+
+  .swal2-title {
+    color: #a00082 !important;
+    font-weight: bold;
+  }
+
+  .swal2-confirm {
+    background-color: #a00082 !important;
+    color: white !important;
+  }
+
+  .swal2-cancel {
+    background-color: #ccc !important;
+  }
+    
+    .scroll-table {
+  max-height: 360px; /* Approx. height for 6 rows */
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.scroll-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #f8d0f4;
+  color: #800080;
+  z-index: 2;
+}
+
+.sunday-row {
+  background-color: #f7fa47 !important; /* Light red */
+  font-weight: bold;
+}
+
+@media print {
+  .sunday-row {
+    background-color: #f7fa47 !important;
+    -webkit-print-color-adjust: exact; /* Makes sure background prints in Chrome */
+    print-color-adjust: exact;
+  }
+}
+
+
+
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <img src="chat.png" alt="Logo" class="logo" />
+    <div class="company-brand">Queens Link Technology INC.</div>
+    <div class="nav-buttons no-print">
+      <a href="index.html">Data Entry</a>
+      <a href="records.html">Records</a>
+      <a href="charts.html">Charts</a>
+    </div>
+  </header>
+
+  <div class="records-container">
+    <h2>Employee Records</h2>
+    <input type="text" id="searchInput" placeholder="Search by name or department..." />
+    <button id="exportBtn">Export to Excel</button>
+    <button id="printBtn">🖨️ Print Records</button>
+ 
+    
+   <div class="scroll-table">
+  <table id="recordsTable">
+    <thead>
+      <tr>
+        <th>Form Type</th>
+        <th>Name</th>
+        <th>Department</th>
+        <th>Date Filed</th>
+        <th>Date of Leave / Regular Day</th>
+        <th>Leave Type</th>
+        <th>Time Start</th>
+        <th>Time End</th>
+        <th>Hours</th>
+        <th>Reason</th>
+        <th class="no-print">Actions</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+
+
+    <div id="pagination" class="no-print"></div>
+    <div class="summary" id="summaryCounts"></div>
+    <div style="margin: 20px 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+  <label for="startFilter" style="font-weight: bold;">From:</label>
+  <input type="date" id="startFilter" style="
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #fdfdff;
+    font-size: 14px;
+  " />
+
+  <label for="endFilter" style="font-weight: bold;">To:</label>
+  <input type="date" id="endFilter" style="
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #fdfdff;
+    font-size: 14px;
+  " />
+
+  <button onclick="renderSummary()" style="
+    padding: 8px 16px;
+    background: #e646be;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  " onmouseover="this.style.background='#cc3aac'" onmouseout="this.style.background='#e646be'">
+    🔍 Filter
+  </button>
+
+  <button onclick="resetSummary()" style="
+    padding: 8px 16px;
+    background: #777;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  " onmouseover="this.style.background='#555'" onmouseout="this.style.background='#777'">
+    🔄 Reset
+  </button>
+</div>
+
+
+  </div>
+
+  <script>
+    const tableBody = document.querySelector("#recordsTable tbody");
+
+    function loadRecords() {
+      const records = JSON.parse(localStorage.getItem("employeeRecords")) || [];
+      tableBody.innerHTML = "";
+      
+    records.forEach((record, index) => {
+  const row = document.createElement("tr");
+
+  // Check if leaveDate is Sunday
+  let isSunday = false;
+  if (record.leaveDate) {
+    const date = new Date(record.leaveDate);
+    isSunday = date.getDay() === 0; // 0 = Sunday
+  }
+
+  if (isSunday) row.classList.add("sunday-row");
+
+  row.innerHTML = `
+    <td>${record.formType}</td>
+    <td>${record.name}</td>
+    <td>${record.department}</td>
+    <td>${record.dateFiled}</td>
+    <td>${record.leaveDate || ""}</td>
+    <td>${record.leaveType || ""}</td>
+    <td>${formatTo12Hour(record.timeStart) || ""}</td>
+    <td>${formatTo12Hour(record.timeEnd) || ""}</td>
+    <td>${record.hours || ""}</td>
+    <td>${record.reason}</td>
+    <td class="no-print">
+      <button class="edit-btn" onclick="editRecord(${index}, this)">Edit</button>
+      <button class="delete-btn" onclick="deleteRecord(${index})">Delete</button>
+    </td>
+  `;
+
+  tableBody.appendChild(row);
+});
+
+
+      renderSummary();
+    }
+
+    function editRecord(index, btn) {
+  const row = btn.closest("tr");
+  const isEditing = btn.textContent === "Save";
+  const cells = row.querySelectorAll("td");
+
+  if (isEditing) {
+    const updated = {
+      formType: cells[0].textContent.trim(),
+      name: cells[1].textContent.trim(),
+      department: cells[2].textContent.trim(),
+      dateFiled: cells[3].textContent.trim(),
+      leaveDate: cells[4].textContent.trim(),
+      leaveType: cells[5].textContent.trim(),
+      timeStart: cells[6].textContent.trim(),
+      timeEnd: cells[7].textContent.trim(),
+      hours: cells[8].textContent.trim(),
+      reason: cells[9].textContent.trim()
+    };
+
+    const records = JSON.parse(localStorage.getItem("employeeRecords")) || [];
+    records[index] = updated;
+    localStorage.setItem("employeeRecords", JSON.stringify(records));
+
+    cells.forEach(cell => cell.contentEditable = "false");
+    btn.textContent = "Edit";
+    btn.className = "edit-btn";
+
+    // ✅ Show success popup after saving
+    Swal.fire({
+      icon: "success",
+      title: "Saved!",
+      text: "Record has been updated.",
+      showConfirmButton: false,
+      timer: 1500
+    });
+
+  } else {
+    row.querySelectorAll("td").forEach((cell, i) => {
+      if (i < 10) cell.contentEditable = "true";
+    });
+    btn.textContent = "Save";
+    btn.className = "save-btn";
+  }
+}
+
+//hour computation format
+function formatTo12Hour(timeStr) {
+  if (!timeStr || !timeStr.includes(":")) return timeStr;
+  const [hour, minute] = timeStr.split(":").map(Number);
+  const period = hour >= 12 ? "PM" : "AM";
+  const hour12 = hour % 12 === 0 ? 12 : hour % 12;
+  return `${hour12}:${minute.toString().padStart(2, '0')} ${period}`;
+}
+
+// delete button section
+    function deleteRecord(index) {
+  const records = JSON.parse(localStorage.getItem("employeeRecords")) || [];
+  const deletedRecord = records.splice(index, 1)[0];
+  localStorage.setItem("employeeRecords", JSON.stringify(records));
+  loadRecords();
+
+  // delete button style
+  Swal.fire({
+  title: "Are you sure?",
+  text: "This will remove the record permanently!",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#e646be",
+  cancelButtonColor: "#999",
+  confirmButtonText: "Yes, delete it!"
+}).then((result) => {
+  if (result.isConfirmed) {
+    // proceed to delete
+  }
+});
+
+}
+
+// Export Button function
+ function exportToExcel() {
+  Swal.fire({
+    title: "Export to Excel",
+    text: "Enter the file name you want to use:",
+    input: "text",
+    inputLabel: "File Name",
+    inputValue: "Employee_Records",
+    showCancelButton: true,
+    confirmButtonText: "Export",
+    cancelButtonText: "Cancel",
+    inputValidator: (value) => {
+      if (!value) return "File name cannot be empty!";
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const table = document.getElementById("recordsTable");
+      const clone = table.cloneNode(true);
+
+      // Optional: remove hidden rows (if filtered)
+      [...clone.querySelectorAll("tbody tr")].forEach(row => {
+        if (row.style.display === "none") row.remove();
+      });
+
+      const wb = XLSX.utils.table_to_book(clone, { sheet: "Filtered Records" });
+      XLSX.writeFile(wb, result.value.trim() + ".xlsx");
+
+      Swal.fire({
+        icon: "success",
+        title: "Exported!",
+        text: "Your Excel file has been downloaded.",
+        timer: 1500,
+        showConfirmButton: false
+      });
+    }
+  });
+}
+
+
+// Summary totals Recorder
+   function renderSummary() {
+  const summary = {
+    "Sick Leave": 0,
+    "Vacation Leave": 0,
+    "Service Incentive Leave": 0
+  };
+
+  
+
+  const startFilter = document.getElementById("startFilter").value;
+  const endFilter = document.getElementById("endFilter").value;
+
+  const records = JSON.parse(localStorage.getItem("employeeRecords")) || [];
+  let startDate = null;
+  let endDate = null;
+
+  records.forEach(r => {
+    const type = r.leaveType?.trim().toLowerCase();
+    const leaveDate = r.leaveDate ? new Date(r.leaveDate) : null;
+
+    // Skip if leaveDate is not valid
+    if (!leaveDate) return;
+
+    // Apply date range filter
+    if (startFilter && leaveDate < new Date(startFilter)) return;
+    if (endFilter && leaveDate > new Date(endFilter)) return;
+
+    // Count leave types
+    if (type === "sick leave") summary["Sick Leave"]++;
+    if (type === "vacation leave") summary["Vacation Leave"]++;
+    if (type === "service incentive leave" || type === "sil") summary["Service Incentive Leave"]++;
+
+    // Track date range within filtered set
+    if (!startDate || leaveDate < startDate) startDate = leaveDate;
+    if (!endDate || leaveDate > endDate) endDate = leaveDate;
+  });
+
+  const summaryDiv = document.getElementById("summaryCounts");
+  summaryDiv.innerHTML = "<h3>Summary Totals (Filtered)</h3>";
+  Object.entries(summary).forEach(([type, count]) => {
+    summaryDiv.innerHTML += `<p>${type}: <strong>${count}</strong></p>`;
+  });
+
+  if (startDate && endDate) {
+    const formatDate = date =>
+      date.toLocaleDateString("en-PH", { year: "numeric", month: "short", day: "numeric" });
+    summaryDiv.innerHTML += `<p><strong>Date Range:</strong> ${formatDate(startDate)} → ${formatDate(endDate)}</p>`;
+  } else {
+    summaryDiv.innerHTML += `<p><strong>No records in selected date range.</strong></p>`;
+  }
+}
+
+function resetSummary() {
+  document.getElementById("startFilter").value = "";
+  document.getElementById("endFilter").value = "";
+  renderSummary();
+}
+
+
+    document.getElementById("exportBtn").addEventListener("click", exportToExcel);
+
+    document.getElementById("printBtn").addEventListener("click", () => {
+      const printWindow = window.open("", "", "width=1000,height=700");
+      const tableHtml = document.getElementById("recordsTable").outerHTML;
+
+     printWindow.document.write(`
+  <html>
+  <head>
+    <title>Print Employee Records</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', sans-serif;
+        padding: 20px;
+      }
+      h2 {
+        text-align: center;
+        color: #800080;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th, td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background: #f0d4f0;
+        color: #800080;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .sunday-row {
+        background-color: #f7fa47 !important;
+        font-weight: bold;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Printed Employee Records</h2>
+    ${tableHtml}
+    <script>
+      window.onload = function() {
+        window.print();
+        window.onafterprint = function () { window.close(); };
+      }
+    <\/script>
+  </body>
+  </html>
+`);
+
+      printWindow.document.close();
+    });
+
+    document.getElementById("searchInput").addEventListener("input", function () {
+      const searchTerm = this.value.toLowerCase();
+      const rows = tableBody.querySelectorAll("tr");
+      rows.forEach(row => {
+        const name = row.children[1].textContent.toLowerCase();
+        const dept = row.children[2].textContent.toLowerCase();
+        row.style.display = name.includes(searchTerm) || dept.includes(searchTerm) ? "" : "none";
+      });
+    });
+
+    document.addEventListener("DOMContentLoaded", loadRecords);
+  </script>
+</body>
+</html>

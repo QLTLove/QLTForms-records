@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Leave Charts</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+     .navbar .logo {
+      height: 50px;
+    }
+    .chart-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding: 20px 0;
+    }
+    canvas {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 160px;
+      height: 160px;
+    }
+    #employeeSearch {
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      width: 300px;
+      margin-bottom: 10px;
+    }
+    .main-content {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+   <div class="shine-overlay"></div>
+    <header class="navbar">
+       <img src="chat.png" alt="Company Logo" class="logo">
+      <div class="company-brand">Queens Link Technology INC.</div>
+      <div class="nav-buttons">
+        <a href="index.html" class="nav-btn">Data Entry</a>
+        <a href="records.html" class="nav-btn">Records</a>
+        <a href="charts.html" class="nav-btn">Charts</a>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <h2>Employee Leave Charts</h2>
+      <input type="text" id="employeeSearch" placeholder="Enter employee name">
+      <div class="chart-container">
+        <canvas id="sickLeaveChart"></canvas>
+        <canvas id="vacationLeaveChart"></canvas>
+        <canvas id="silChart"></canvas>
+      </div>
+    </div>
+
+<script>
+  const searchInput = document.getElementById("employeeSearch");
+  searchInput.addEventListener("input", () => {
+    generateCharts();
+  });
+
+  window.onload = function () {
+    generateCharts();
+  };
+
+  function generateCharts() {
+    const name = document.getElementById("employeeSearch").value.trim().toLowerCase();
+    const records = JSON.parse(localStorage.getItem("employeeRecords") || "[]");
+
+    const filtered = name
+      ? records.filter(record => record.name.toLowerCase().includes(name))
+      : [];
+
+    let sick = 0, vacation = 0, sil = 0;
+
+    filtered.forEach(record => {
+      if (record.formType === "Application for Leave") {
+        const leaveType = (record.leaveType || "").toLowerCase();
+        if (leaveType === "sick leave") sick++;
+        else if (leaveType === "vacation leave") vacation++;
+        else if (leaveType.includes("incentive")) sil++;
+      }
+    });
+
+    renderPieChart("sickLeaveChart", "Sick Leave", sick, 8);
+    renderPieChart("vacationLeaveChart", "Vacation Leave", vacation, 8);
+    renderPieChart("silChart", "SIL", sil, 5);
+  }
+
+  function renderPieChart(canvasId, label, used, total) {
+    const ctx = document.getElementById(canvasId).getContext("2d");
+    if (window[canvasId + "Instance"]) {
+      window[canvasId + "Instance"].destroy();
+    }
+
+    window[canvasId + "Instance"] = new Chart(ctx, {
+      type: "pie",
+      data: {
+        labels: [label + " Used", "Remaining"],
+        datasets: [{
+          data: [used, total - used],
+          backgroundColor: ["#c91f9e", "#e0e0e0"]
+        }]
+      },
+      options: {
+        responsive: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: "bottom"
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const label = context.label || '';
+                const val = context.parsed;
+                return `${label}: ${val} day${val !== 1 ? 's' : ''}`;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+</script>
+
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>
